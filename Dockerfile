@@ -1,5 +1,5 @@
 # Serving image: FastAPI + ONNX Runtime (no PyTorch needed at inference time)
-FROM python:3.12-slim
+FROM public.ecr.aws/docker/library/python:3.12-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     PAM_MODEL_DIR=/app/models PAM_WEB_DIR=/app/web PAM_DATA_DIR=/tmp/pam-results
