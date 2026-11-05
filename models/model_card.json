@@ -1,0 +1,116 @@
+{
+ "name": "pam-unet",
+ "version": "0.1.0",
+ "architecture": "U-Net, resnet34 encoder (ImageNet init)",
+ "classes": [
+  "other",
+  "lawn",
+  "roof",
+  "hardscape",
+  "tree"
+ ],
+ "input": {
+  "shape": [
+   1,
+   3,
+   512,
+   512
+  ],
+  "gsd_m": 0.15,
+  "normalization": "ImageNet mean/std, RGB 0-1"
+ },
+ "training_data": "ISPRS Potsdam (26 train tiles, 4 val tiles), resampled to 0.15 m +/- 30%",
+ "checkpoint_epoch": 15,
+ "validation": {
+  "input_gsd": 0.15,
+  "window_m": 36.0,
+  "n_windows": 256,
+  "miou": 0.752,
+  "iou": {
+   "other": 0.409,
+   "lawn": 0.66,
+   "roof": 0.9095,
+   "hardscape": 0.7939,
+   "tree": 0.6446
+  },
+  "area_accuracy": {
+   "lawn": {
+    "n": 237,
+    "median": 0.8762,
+    "mean": 0.7843,
+    "within_10pct": 0.4177,
+    "within_20pct": 0.6287,
+    "aggregate": 0.9717,
+    "bias_pct": -2.83
+   },
+   "roof": {
+    "n": 189,
+    "median": 0.9598,
+    "mean": 0.9204,
+    "within_10pct": 0.8307,
+    "within_20pct": 0.9259,
+    "aggregate": 0.9768,
+    "bias_pct": 2.32
+   },
+   "hardscape": {
+    "n": 245,
+    "median": 0.9284,
+    "mean": 0.8405,
+    "within_10pct": 0.5714,
+    "within_20pct": 0.7551,
+    "aggregate": 0.9916,
+    "bias_pct": -0.84
+   },
+   "tree": {
+    "n": 220,
+    "median": 0.843,
+    "mean": 0.7651,
+    "within_10pct": 0.3455,
+    "within_20pct": 0.6091,
+    "aggregate": 0.995,
+    "bias_pct": 0.5
+   }
+  }
+ },
+ "exported": "2026-11-04T21:19:08Z",
+ "files": {
+  "server": {
+   "file": "pam_unet.onnx",
+   "sha256": "ab09ad06f74fc01026f7e9a63693d7054c446d2de7b94f02bc05012a282191e7",
+   "mb": 97.7
+  },
+  "browser": {
+   "file": "pam_unet_int8w.onnx",
+   "sha256": "7b8acefe012751f49460d7eca66abd42fd1833d9ad993aa62e4c80503c8e6263",
+   "mb": 24.6,
+   "int8_weight_tensors": 46,
+   "pixel_agreement_vs_fp32": 1.0
+  }
+ },
+ "max_abs_diff_torch_vs_onnx": 4.291534423828125e-06,
+ "license_note": "Prototype trained on a research benchmark; retrain on licensed US data before commercial use.",
+ "test_evaluation": {
+  "split": "test",
+  "tiles": [
+   "2_13",
+   "3_10",
+   "4_13",
+   "5_11",
+   "6_9",
+   "6_14",
+   "7_8",
+   "7_12"
+  ],
+  "windows": 512,
+  "window_m": 36.0,
+  "lawn_median_accuracy": 0.8537,
+  "roof_median_accuracy": 0.9682,
+  "lawn_within_10pct": 0.3877,
+  "roof_within_10pct": 0.8141,
+  "lawn_total_accuracy": 0.995,
+  "roof_total_accuracy": 0.9957,
+  "miou": 0.7759,
+  "AC-01_pass": false,
+  "AC-02_pass": true
+ }
+}

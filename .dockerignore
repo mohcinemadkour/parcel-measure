@@ -1,0 +1,10 @@
+data/
+models/run/
+models/*.pth
+demo/
+tests/
+**/__pycache__
+*.log
+.git
+models/history/
+models/*.csv

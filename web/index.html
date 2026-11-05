@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Property Area Measurement</title>
+<style>
+:root{--bg:#f6f7f5;--panel:#fff;--ink:#1d2421;--muted:#5d6762;--line:#dfe3df;--accent:#1f6f4a;--accent-2:#e8f2ec;--warn:#9a5b00;--warn-bg:#fff4e0;--bad:#a12a2a;--good:#1f6f4a;
+--lawn:#4caf50;--roof:#e53935;--hard:#9e9e9e;--tree:#1b5e20;--radius:10px;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
+header{display:flex;align-items:center;gap:14px;padding:14px 22px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:17px;margin:0;font-weight:650;letter-spacing:-.01em}
+.badge{font-size:12px;padding:3px 9px;border-radius:99px;background:var(--accent-2);color:var(--accent);font-weight:600;white-space:nowrap}
+.badge.off{background:#f1f1f1;color:var(--muted)}.spacer{flex:1}
+main{display:grid;grid-template-columns:360px 1fr;gap:18px;padding:18px 22px;max-width:1500px;margin:0 auto}
+@media(max-width:980px){main{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px;font-weight:650}
+label{display:block;font-size:12.5px;color:var(--muted);margin:8px 0 4px}
+input[type=text],input[type=number],input[type=password],select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff}
+input[type=number].sm{width:84px;padding:5px 7px}
+button{font:inherit;border-radius:8px;border:1px solid var(--line);background:#fff;padding:8px 12px;cursor:pointer;color:var(--ink)}
+button:hover{border-color:#bfc7c1}button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;width:100%;padding:11px}
+button.primary:disabled{opacity:.55;cursor:wait}button.on{background:var(--accent-2);border-color:var(--accent);color:var(--accent)}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+.tabs{display:flex;gap:6px;margin-bottom:10px}.tabs button{flex:1;padding:6px}
+.samples{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.samples button{padding:0;border-radius:8px;overflow:hidden;aspect-ratio:1;border:2px solid transparent}
+.samples button.sel{border-color:var(--accent)}.samples img{width:100%;height:100%;object-fit:cover;display:block}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.viewer{position:relative;background:#0e1311;border-radius:var(--radius);overflow:hidden;min-height:340px;display:flex;align-items:center;justify-content:center}
+.viewer canvas{max-width:100%;display:block;cursor:crosshair}
+.viewer .empty{color:#9fb0a7;padding:60px;text-align:center}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--muted);margin-top:10px;align-items:center}
+.sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+th{font-size:12px;color:var(--muted);font-weight:600}td.num,th.num{text-align:right;white-space:nowrap}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:1200px){.grid2{grid-template-columns:1fr}}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}@media(max-width:800px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px}
+.kpi .v{font-size:22px;font-weight:650;letter-spacing:-.02em}.kpi .l{font-size:12px;color:var(--muted)}
+.warn{background:var(--warn-bg);color:var(--warn);border-radius:8px;padding:9px 11px;font-size:13px;margin-bottom:10px}
+.ok{background:var(--accent-2);color:var(--accent);border-radius:8px;padding:9px 11px;font-size:13px;margin-bottom:10px}
+.acc-good{color:var(--good);font-weight:600}.acc-bad{color:var(--bad);font-weight:600}
+.status{font-size:12.5px;color:var(--muted);min-height:18px;margin-top:8px}
+input.override{width:96px;padding:4px 6px;border:1px dashed #c9d0cb;border-radius:6px;text-align:right;font:inherit}
+details summary{cursor:pointer;color:var(--muted);font-size:13px;margin:4px 0}
+.price td{padding:4px 4px}.price input[type=number]{width:70px;padding:4px 5px}
+.muted{color:var(--muted)}.small{font-size:12px}
+.exports{display:flex;flex-wrap:wrap;gap:6px}
+pre{white-space:pre-wrap;word-break:break-all;background:#f3f5f3;border-radius:8px;padding:10px;font-size:11.5px;max-height:220px;overflow:auto}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>Property Area Measurement</h1>
+  <span id="modeBadge" class="badge off">connecting…</span>
+  <span id="modelBadge" class="badge off">model —</span>
+  <div class="spacer"></div>
+  <span class="small muted" id="hdrHint">Lawn · roof · hardscape · tree canopy → instant quote</span>
+</header>
+<main>
+<section>
+  <div class="card" id="connCard">
+    <h2>Connection</h2>
+    <div id="serverConn" class="hidden">
+      <label for="apiKey">API key</label>
+      <input id="apiKey" type="password" placeholder="X-API-Key (leave empty in dev mode)">
+      <div class="hint">Stored only in this browser.</div>
+    </div>
+    <div id="browserConn" class="hidden small muted">In-browser demo: the model runs on your computer. Nothing is uploaded.</div>
+    <div class="status" id="connStatus"></div>
+  </div>
+
+  <div class="card">
+    <h2>1 · Image</h2>
+    <div class="tabs"><button id="tabSamples" class="on">Samples with ground truth</button><button id="tabUpload">Upload</button></div>
+    <div id="paneSamples"><div class="samples" id="samples"></div>
+      <div class="hint">Held-out aerial photos the model never trained on. True areas are known, so you can check accuracy.</div></div>
+    <div id="paneUpload" class="hidden">
+      <input id="file" type="file" accept=".tif,.tiff,.png,.jpg,.jpeg">
+      <label for="gsd">Ground sample distance (metres per pixel)</label>
+      <input id="gsd" type="number" step="0.005" min="0.05" max="0.6" placeholder="e.g. 0.15 (read automatically from GeoTIFF)">
+      <div class="hint">Google/Mapbox satellite at zoom 20 ≈ 0.10–0.15 m; Nearmap ≈ 0.075 m; NAIP ≈ 0.6 m.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2 · Parcel &amp; roof</h2>
+    <div class="row"><button id="drawBtn">Draw parcel</button><button id="clearBtn">Clear parcel</button></div>
+    <div class="hint" id="parcelHint">Optional. Click points around the lot; click the first point (or Draw again) to close.</div>
+    <label for="pitch">Roof pitch (rise per 12 in run)</label>
+    <select id="pitch"><option value="0">Flat (0/12)</option><option value="3">3/12</option><option value="4">4/12</option><option value="5">5/12</option><option value="6" selected>6/12 (default)</option><option value="7">7/12</option><option value="8">8/12</option><option value="10">10/12</option><option value="12">12/12</option></select>
+  </div>
+
+  <div class="card">
+    <h2>3 · Price table</h2>
+    <details><summary>Edit services and rates</summary>
+      <table class="price" id="priceTbl"><thead><tr><th>On</th><th>Service</th><th class="num">Rate</th><th class="num">Min</th></tr></thead><tbody></tbody></table>
+    </details>
+    <div style="margin-top:12px"><button class="primary" id="measureBtn" disabled>Measure property</button></div>
+    <div class="status" id="runStatus"></div>
+  </div>
+</section>
+
+<section>
+  <div class="kpis">
+    <div class="kpi"><div class="v" id="kLawn">—</div><div class="l">Lawn (sq ft)</div></div>
+    <div class="kpi"><div class="v" id="kRoof">—</div><div class="l">Roof surface (sq ft)</div></div>
+    <div class="kpi"><div class="v" id="kHard">—</div><div class="l">Hardscape (sq ft)</div></div>
+    <div class="kpi"><div class="v" id="kQuote">—</div><div class="l">Quote total</div></div>
+  </div>
+  <div class="card" style="padding:10px">
+    <div class="viewer" id="viewer"><div class="empty" id="emptyMsg">Pick a sample or upload an image to start.</div><canvas id="cv" class="hidden"></canvas></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--lawn)"></i>Lawn</span><span><i class="sw" style="background:var(--roof)"></i>Roof</span>
+      <span><i class="sw" style="background:var(--hard)"></i>Hardscape</span><span><i class="sw" style="background:var(--tree)"></i>Tree canopy</span>
+      <span class="spacer"></span>
+      <label class="small" style="margin:0">Overlay <input id="opacity" type="range" min="0" max="100" value="70" style="vertical-align:middle"></label>
+    </div>
+  </div>
+  <div id="results" class="hidden">
+    <div id="reviewBox"></div>
+    <div class="grid2">
+      <div class="card"><h2>Measurements</h2>
+        <table id="measTbl"><thead><tr><th>Feature</th><th class="num">Measured</th><th class="num">Override</th><th class="num">Confidence</th></tr></thead><tbody></tbody></table>
+        <div class="hint">Type an override to correct a number; the quote updates and the correction is saved as feedback.</div>
+      </div>
+      <div class="card"><h2>Quote</h2>
+        <table id="quoteTbl"><thead><tr><th>Service</th><th class="num">Qty</th><th class="num">Price</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <div class="card" id="accCard"><h2>Accuracy against ground truth</h2>
+      <table id="accTbl"><thead><tr><th>Feature</th><th class="num">True (sq ft)</th><th class="num">Measured (sq ft)</th><th class="num">Accuracy</th></tr></thead><tbody></tbody></table>
+      <div class="hint">Accuracy = 1 − |measured − true| ÷ true. Target ≥ 90% for lawn and roof. Features under 215 sq ft are not scored.</div>
+    </div>
+    <div class="card"><h2>Export</h2>
+      <div class="exports"><button id="exJson">JSON</button><button id="exGeo">GeoJSON</button><button id="exCsv">CSV</button><button id="exPng">Overlay PNG</button><button id="exCopy">Copy JSON</button></div>
+      <div class="status" id="exStatus"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+"use strict";
+const CLASSES=["other","lawn","roof","hardscape","tree"];
+const COLORS=[[0,0,0,0],[76,175,80,150],[229,57,53,150],[158,158,158,150],[27,94,32,150]];
+const CANON=0.15, TILE=512, OVERLAP=64, SQFT=10.7639, FT=3.28084;
+const MEAN=[0.485,0.456,0.406], STD=[0.229,0.224,0.225];
+const DEFAULT_TABLE={company:"Demo Lawn & Home Services",currency:"USD",tax_pct:0,lines:[
+ {service:"Mowing (per visit)",basis:"lawn_sqft",rate:4.5,per:1000,minimum:35,surcharge_pct:0,enabled:true},
+ {service:"Fertilization (per application)",basis:"lawn_sqft",rate:6,per:1000,minimum:45,surcharge_pct:0,enabled:true},
+ {service:"Core aeration",basis:"lawn_sqft",rate:9,per:1000,minimum:75,surcharge_pct:0,enabled:true},
+ {service:"Edging",basis:"lawn_perimeter_ft",rate:0.15,per:1,minimum:20,surcharge_pct:0,enabled:true},
+ {service:"Perimeter pest control",basis:"roof_perimeter_ft",rate:0.12,per:1,minimum:75,surcharge_pct:0,enabled:true},
+ {service:"Roof replacement (asphalt shingle)",basis:"roof_squares",rate:425,per:1,minimum:0,surcharge_pct:0,enabled:false},
+ {service:"Driveway & patio pressure wash",basis:"hardscape_sqft",rate:0.18,per:1,minimum:99,surcharge_pct:0,enabled:false}]};
+const $=id=>document.getElementById(id);
+const S={mode:null,session:null,samples:[],img:null,imgName:"",gsd:null,sample:null,parcel:[],drawing:false,result:null,overrides:{},table:JSON.parse(JSON.stringify(DEFAULT_TABLE)),overlay:null,fileBytes:null};
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const fmt=(v,d=0)=>v==null||isNaN(v)?"—":Number(v).toLocaleString("en-US",{maximumFractionDigits:d,minimumFractionDigits:d});
+const money=v=>"$"+fmt(v,2);
+
+// ------------------------------------------------------------- startup
+async function init(){
+  renderPriceTable();
+  $("apiKey").value=store.get("pam_key")||"";
+  $("apiKey").addEventListener("change",e=>store.set("pam_key",e.target.value));
+  let server=false;
+  try{const r=await fetch("v1/health",{cache:"no-store"}); server=r.ok;}catch(e){}
+  if(server){
+    S.mode="server"; $("modeBadge").textContent="Connected to API"; $("modeBadge").className="badge";
+    $("serverConn").classList.remove("hidden");
+    try{const r=await fetch("v1/ready");const j=await r.json();$("connStatus").textContent=j.ready?"Model loaded · results stored in "+j.store:"Model not loaded: "+j.error;}catch(e){}
+    try{const r=await fetch("v1/model",{headers:hdr()});if(r.ok){const c=await r.json();$("modelBadge").textContent="model "+(c.version||"?");$("modelBadge").className="badge";}}catch(e){}
+  }else{
+    S.mode="browser"; $("modeBadge").textContent="In-browser demo"; $("modeBadge").className="badge";
+    $("browserConn").classList.remove("hidden"); $("exJson").classList.add("hidden");$("exGeo").classList.add("hidden");$("exCsv").classList.add("hidden");$("exPng").classList.add("hidden");
+    $("connStatus").textContent="Loading model (≈25 MB, first time only)…";
+    loadBrowserModel().then(()=>{$("connStatus").textContent="Model ready in your browser.";updateBtn();}).catch(e=>{$("connStatus").textContent="Model failed to load: "+e.message;});
+  }
+  try{const r=await fetch(S.mode==="server"?"v1/samples":"samples/index.json");S.samples=await r.json();}catch(e){S.samples=[];}
+  renderSamples(); updateBtn();
+}
+function hdr(){const k=$("apiKey").value.trim();return k?{"X-API-Key":k}:{}}
+
+// ------------------------------------------------------------- browser model
+async function loadBrowserModel(){
+  if(typeof ort==="undefined") await new Promise((ok,bad)=>{const s=document.createElement("script");s.src="ort/ort.wasm.min.js";s.onload=ok;s.onerror=()=>bad(new Error("ort runtime missing"));document.head.appendChild(s);});
+  const meta=await (await fetch("model/manifest.json")).json();
+  $("modelBadge").textContent="model "+meta.version; $("modelBadge").className="badge";
+  const parts=await Promise.all(meta.parts.map(p=>fetch("model/"+p).then(r=>{if(!r.ok)throw new Error(p+" "+r.status);return r.arrayBuffer()})));
+  const total=parts.reduce((a,b)=>a+b.byteLength,0), buf=new Uint8Array(total); let o=0;
+  for(const p of parts){buf.set(new Uint8Array(p),o);o+=p.byteLength;}
+  ort.env.wasm.numThreads=1; ort.env.wasm.wasmPaths=new URL("ort/",location.href).href;
+  S.session=await ort.InferenceSession.create(buf,{executionProviders:["wasm"],graphOptimizationLevel:"all"});
+}
+
+// ------------------------------------------------------------- UI: samples / upload
+function renderSamples(){
+  const box=$("samples"); box.innerHTML="";
+  S.samples.forEach((s,i)=>{const b=document.createElement("button");b.title=s.title;b.innerHTML=`<img alt="${s.title}" src="samples/${s.file}">`;
+    b.onclick=()=>selectSample(i,b);box.appendChild(b);});
+  if(!S.samples.length) box.innerHTML='<span class="small muted">No samples available.</span>';
+}
+async function selectSample(i,btn){
+  document.querySelectorAll(".samples button").forEach(b=>b.classList.remove("sel"));btn.classList.add("sel");
+  const s=S.samples[i]; S.sample=s;
+  const blob=await (await fetch("samples/"+s.file)).blob();
+  S.fileBytes=blob; S.imgName=s.file; S.gsd=s.gsd; $("gsd").value=s.gsd;
+  await showImage(blob);
+}
+$("tabSamples").onclick=()=>{$("tabSamples").classList.add("on");$("tabUpload").classList.remove("on");$("paneSamples").classList.remove("hidden");$("paneUpload").classList.add("hidden");};
+$("tabUpload").onclick=()=>{$("tabUpload").classList.add("on");$("tabSamples").classList.remove("on");$("paneUpload").classList.remove("hidden");$("paneSamples").classList.add("hidden");};
+$("file").onchange=async e=>{const f=e.target.files[0];if(!f)return;S.sample=null;S.fileBytes=f;S.imgName=f.name;
+  document.querySelectorAll(".samples button").forEach(b=>b.classList.remove("sel"));
+  if(/\.tiff?$/i.test(f.name)){
+    if(S.mode!=="server"){$("runStatus").textContent="GeoTIFF needs the server API; in the demo, upload PNG/JPEG and enter the GSD.";return;}
+    S.img=null;$("runStatus").textContent="GeoTIFF selected; its georeferencing sets the GSD. Preview appears after measuring.";clearView();updateBtn();return;}
+  await showImage(f);};
+$("gsd").oninput=()=>{S.gsd=parseFloat($("gsd").value)||null;updateBtn();};
+function updateBtn(){const ready=(S.img||(S.fileBytes&&S.mode==="server"))&&(S.gsd||/\.tiff?$/i.test(S.imgName))&&(S.mode==="server"||S.session);$("measureBtn").disabled=!ready;}
+
+async function showImage(blob){
+  const bmp=await createImageBitmap(blob); S.img=bmp; S.parcel=[]; S.result=null; S.overlay=null; S.overrides={};
+  $("results").classList.add("hidden"); resetKpis(); draw(); updateBtn();
+}
+function clearView(){S.img=null;S.overlay=null;$("cv").classList.add("hidden");$("emptyMsg").classList.remove("hidden");}
+function resetKpis(){["kLawn","kRoof","kHard","kQuote"].forEach(k=>$(k).textContent="—");}
+
+// ------------------------------------------------------------- drawing
+const cv=$("cv"), ctx=cv.getContext("2d");
+function draw(){
+  if(!S.img){return;}
+  $("emptyMsg").classList.add("hidden"); cv.classList.remove("hidden");
+  const maxW=Math.min(1100,$("viewer").clientWidth||900); const sc=Math.min(1,maxW/S.img.width)*Math.max(1,Math.min(2.2,600/S.img.height));
+  cv.width=Math.round(S.img.width*sc); cv.height=Math.round(S.img.height*sc); S.view=sc;
+  ctx.imageSmoothingEnabled=true; ctx.drawImage(S.img,0,0,cv.width,cv.height);
+  if(S.overlay){ctx.globalAlpha=$("opacity").value/100; ctx.drawImage(S.overlay,0,0,cv.width,cv.height); ctx.globalAlpha=1;}
+  if(S.parcel.length){ctx.strokeStyle="#ffd54f";ctx.lineWidth=2.5;ctx.fillStyle="rgba(255,213,79,.12)";ctx.beginPath();
+    S.parcel.forEach(([x,y],i)=>{const X=x*sc,Y=y*sc;i?ctx.lineTo(X,Y):ctx.moveTo(X,Y);});
+    if(!S.drawing){ctx.closePath();ctx.fill();} ctx.stroke();
+    S.parcel.forEach(([x,y],i)=>{ctx.fillStyle=i===0?"#ffd54f":"#fff";ctx.beginPath();ctx.arc(x*sc,y*sc,i===0?6:4,0,7);ctx.fill();});}
+}
+$("opacity").oninput=draw; window.addEventListener("resize",draw);
+$("drawBtn").onclick=()=>{ if(!S.img)return; if(S.drawing){S.drawing=false;$("drawBtn").classList.remove("on");$("drawBtn").textContent="Draw parcel";}
+  else{S.drawing=true;S.parcel=[];$("drawBtn").classList.add("on");$("drawBtn").textContent="Finish parcel";} draw();};
+$("clearBtn").onclick=()=>{S.parcel=[];S.drawing=false;$("drawBtn").classList.remove("on");$("drawBtn").textContent="Draw parcel";draw();};
+cv.addEventListener("click",e=>{ if(!S.drawing)return; const r=cv.getBoundingClientRect();
+  const x=(e.clientX-r.left)*(cv.width/r.width)/S.view, y=(e.clientY-r.top)*(cv.height/r.height)/S.view;
+  if(S.parcel.length>2){const [x0,y0]=S.parcel[0]; if(Math.hypot((x-x0)*S.view,(y-y0)*S.view)<10){$("drawBtn").click();return;}}
+  S.parcel.push([Math.round(x*10)/10,Math.round(y*10)/10]); draw();});
+
+// ------------------------------------------------------------- price table
+function renderPriceTable(){
+  const tb=$("priceTbl").querySelector("tbody"); tb.innerHTML="";
+  S.table.lines.forEach((ln,i)=>{const tr=document.createElement("tr");
+    tr.innerHTML=`<td><input type="checkbox" ${ln.enabled?"checked":""}></td><td class="small">${ln.service}<div class="muted">per ${ln.per>1?ln.per.toLocaleString()+" ":""}${ln.basis.replace(/_/g," ").replace("sqft","sq ft").replace(" ft"," ft")}</div></td>
+      <td class="num"><input type="number" step="0.01" value="${ln.rate}"></td><td class="num"><input type="number" step="1" value="${ln.minimum}"></td>`;
+    const [cb,rate,min]=tr.querySelectorAll("input");
+    cb.onchange=()=>{ln.enabled=cb.checked;requote();}; rate.oninput=()=>{ln.rate=parseFloat(rate.value)||0;requote();}; min.oninput=()=>{ln.minimum=parseFloat(min.value)||0;requote();};
+    tb.appendChild(tr);});
+}
+function buildQuote(m,t){let sub=0;const items=[];
+  for(const ln of t.lines){if(!ln.enabled)continue;const q=ln.basis==="flat"?1:(m[ln.basis]||0);const raw=q/ln.per*ln.rate;const p=Math.max(raw,ln.minimum)*(1+(ln.surcharge_pct||0)/100);
+    items.push({service:ln.service,basis:ln.basis,quantity:q,price:Math.round(p*100)/100,minimum_applied:raw<ln.minimum});sub+=p;}
+  const tax=sub*(t.tax_pct||0)/100; return {items,subtotal:Math.round(sub*100)/100,tax:Math.round(tax*100)/100,total:Math.round((sub+tax)*100)/100,currency:t.currency};}
+function effective(){return {...S.result.measurements,...S.overrides};}
+function requote(){ if(!S.result)return; const m=effective();
+  if(S.overrides.roof_footprint_sqft!=null){const pf=S.result.measurements.roof_pitch_factor;m.roof_surface_sqft=m.roof_footprint_sqft*pf;m.roof_squares=m.roof_surface_sqft/100;}
+  renderQuote(buildQuote(m,S.table)); }
+
+// ------------------------------------------------------------- measure
+$("measureBtn").onclick=async()=>{
+  const btn=$("measureBtn"); btn.disabled=true; $("runStatus").textContent="Measuring…"; const t0=performance.now();
+  try{
+    if(S.mode==="server") await measureServer(); else await measureBrowser();
+    $("runStatus").textContent=`Done in ${((performance.now()-t0)/1000).toFixed(1)} s`+(S.result.id?` · result ${S.result.id.slice(0,8)}`:"");
+    S.overrides={}; renderResults();
+  }catch(e){ $("runStatus").textContent="Error: "+e.message; console.error(e);}
+  finally{ updateBtn(); }
+};
+async function measureServer(){
+  const fd=new FormData(); fd.append("file",S.fileBytes,S.imgName);
+  if(S.gsd && !/\.tiff?$/i.test(S.imgName)) fd.append("gsd",S.gsd);
+  if(S.parcel.length>2) fd.append("parcel",JSON.stringify(S.parcel));
+  fd.append("pitch",$("pitch").value); fd.append("price_table",JSON.stringify(S.table)); fd.append("include_overlay","true");
+  const r=await fetch("v1/measure",{method:"POST",body:fd,headers:hdr()});
+  const j=await r.json(); if(!r.ok) throw new Error(j.detail||r.status);
+  S.result=j; const ov=await createImageBitmap(await (await fetch("data:image/png;base64,"+j.overlay_png_base64)).blob());
+  if(!S.img){S.img=ov;} S.overlay=ov; S.overlayIsBlend=true; draw();
+}
+
+// --- in-browser pipeline (mirrors pam/inference.py + pam/measure.py)
+async function measureBrowser(){
+  const gsd=S.gsd, scale=gsd/CANON, W=Math.max(1,Math.round(S.img.width*scale)), H=Math.max(1,Math.round(S.img.height*scale));
+  const oc=new OffscreenCanvas(W,H), octx=oc.getContext("2d"); octx.imageSmoothingQuality="high"; octx.drawImage(S.img,0,0,W,H);
+  const px=octx.getImageData(0,0,W,H).data;
+  const PH=Math.max(H,TILE), PW=Math.max(W,TILE), C=5;
+  const x=new Float32Array(3*PH*PW);
+  for(let i=0;i<H;i++)for(let j=0;j<W;j++){const s=(i*W+j)*4, d=i*PW+j; for(let c=0;c<3;c++) x[c*PH*PW+d]=(px[s+c]/255-MEAN[c])/STD[c];}
+  for(let i=0;i<PH;i++)for(let j=0;j<PW;j++){ if(i<H&&j<W)continue; const d=i*PW+j; for(let c=0;c<3;c++) x[c*PH*PW+d]=(0-MEAN[c])/STD[c]; }
+  const acc=new Float32Array(C*PH*PW), wsum=new Float32Array(PH*PW);
+  const ramp=new Float32Array(TILE); for(let k=0;k<TILE;k++) ramp[k]=Math.min(1,Math.min(k+1,TILE-k)/OVERLAP);
+  const wins=n=>{if(n<=TILE)return[0];const s=[];for(let v=0;v<n-TILE;v+=TILE-OVERLAP)s.push(v);s.push(n-TILE);return[...new Set(s)];};
+  const ys=wins(PH), xs=wins(PW); let k=0;
+  for(const y0 of ys)for(const x0 of xs){
+    k++; $("runStatus").textContent=`Running model: window ${k} of ${ys.length*xs.length}…`; await new Promise(r=>setTimeout(r,0));
+    const t=new Float32Array(3*TILE*TILE);
+    for(let c=0;c<3;c++)for(let i=0;i<TILE;i++){const so=c*PH*PW+(y0+i)*PW+x0; t.set(x.subarray(so,so+TILE),c*TILE*TILE+i*TILE);}
+    // test-time augmentation: original + horizontal flip (same as the server's PAM_TTA=flip)
+    const tf=new Float32Array(3*TILE*TILE);
+    for(let c=0;c<3;c++)for(let i=0;i<TILE;i++)for(let j=0;j<TILE;j++) tf[c*TILE*TILE+i*TILE+j]=t[c*TILE*TILE+i*TILE+(TILE-1-j)];
+    const run=async a=>(await S.session.run({[S.session.inputNames[0]]:new ort.Tensor("float32",a,[1,3,TILE,TILE])}))[S.session.outputNames[0]].data;
+    const lgs=[await run(t), await run(tf)];
+    for(let i=0;i<TILE;i++)for(let j=0;j<TILE;j++){
+      const w=(0.001+ramp[i]*ramp[j]), d=(y0+i)*PW+(x0+j);
+      for(let v=0;v<2;v++){ const lg=lgs[v], o=i*TILE+(v?TILE-1-j:j); let m=-1e9; for(let c=0;c<C;c++) m=Math.max(m,lg[c*TILE*TILE+o]);
+        let s=0; const e=new Array(C); for(let c=0;c<C;c++){e[c]=Math.exp(lg[c*TILE*TILE+o]-m); s+=e[c];}
+        for(let c=0;c<C;c++) acc[c*PH*PW+d]+=e[c]/s*w/2; }
+      wsum[d]+=w;}
+  }
+  const cls=new Uint8Array(W*H), prob=new Float32Array(C*W*H);
+  for(let i=0;i<H;i++)for(let j=0;j<W;j++){const d=i*PW+j, o=i*W+j; let best=0,bv=-1;
+    for(let c=0;c<C;c++){const p=acc[c*PH*PW+d]/wsum[d]; prob[c*W*H+o]=p; if(p>bv){bv=p;best=c;}} cls[o]=best;}
+  cleanMask(cls,W,H);
+  const valid=parcelMask(W,H,scale);
+  const pf=Math.sqrt(1+Math.pow(parseFloat($("pitch").value)/12,2)), pxm2=CANON*CANON;
+  const areas={},conf={}; for(let c=0;c<C;c++){let n=0,ps=0;for(let o=0;o<W*H;o++){if(valid[o]&&cls[o]===c){n++;ps+=prob[c*W*H+o];}}
+    areas[CLASSES[c]]={m2:n*pxm2,sqft:n*pxm2*SQFT}; conf[CLASSES[c]]=n?ps/n:null;}
+  const meas={lawn_sqft:areas.lawn.sqft,lawn_perimeter_ft:perimeter(cls,valid,W,H,1)*CANON*FT,roof_footprint_sqft:areas.roof.sqft,
+    roof_pitch:parseFloat($("pitch").value),roof_pitch_factor:pf,roof_surface_sqft:areas.roof.sqft*pf,roof_squares:areas.roof.sqft*pf/100,
+    roof_perimeter_ft:perimeter(cls,valid,W,H,2)*CANON*FT,hardscape_sqft:areas.hardscape.sqft,tree_canopy_sqft:areas.tree.sqft,parcel_sqft:valid.reduce((a,b)=>a+b,0)*pxm2*SQFT};
+  const reasons=[]; for(const c of ["lawn","roof"]) if(conf[c]!=null&&conf[c]<0.8) reasons.push(`${c} confidence ${conf[c].toFixed(2)} below 0.8`);
+  const perv=areas.lawn.m2+areas.tree.m2; if(perv>0&&areas.tree.m2/perv>0.35) reasons.push("tree canopy hides more than 35% of pervious area; lawn may be under-measured");
+  if(gsd>0.3) reasons.push(`image resolution ${gsd} m/px is coarser than 0.3 m/px`);
+  const cv2=Object.values(conf).filter(v=>v!=null);
+  S.result={id:null,model_version:$("modelBadge").textContent.replace("model ",""),input:{filename:S.imgName,gsd_m:gsd,parcel:S.parcel.length>2?S.parcel:null,pitch:meas.roof_pitch},
+    measurements:meas,areas,confidence:{...conf,overall:cv2.reduce((a,b)=>a+b,0)/cv2.length},review:{required:reasons.length>0,reasons},
+    quote:buildQuote(meas,S.table),price_table:S.table,_cls:cls,_valid:valid,_W:W,_H:H};
+  const ov=new OffscreenCanvas(W,H), oc2=ov.getContext("2d"), im=oc2.createImageData(W,H);
+  for(let o=0;o<W*H;o++){const col=valid[o]?COLORS[cls[o]]:[0,0,0,120]; im.data.set([col[0],col[1],col[2],valid[o]?(cls[o]?255:0):120],o*4);}
+  oc2.putImageData(im,0,0); S.overlay=await createImageBitmap(ov); S.overlayIsBlend=false; draw();
+}
+function cleanMask(cls,W,H){ // speck removal (<1 m2) and hole fill (<0.5 m2) for lawn and roof
+  const minPx=Math.floor(1/(CANON*CANON)), holePx=Math.floor(0.5/(CANON*CANON));
+  const lab=new Int32Array(W*H), q=new Int32Array(W*H);
+  const comps=(pred)=>{lab.fill(0);const out=[];let id=0;
+    for(let s=0;s<W*H;s++){ if(lab[s]||!pred(s))continue; id++; let h=0,t=0; q[t++]=s; lab[s]=id; const mem=[]; let edge=false;
+      while(h<t){const p=q[h++]; mem.push(p); const i=(p/W)|0, j=p-i*W; if(i===0||j===0||i===H-1||j===W-1) edge=true;
+        for(const n of [p-W,p+W,(j>0?p-1:-1),(j<W-1?p+1:-1)]){ if(n<0||n>=W*H||lab[n]||!pred(n))continue; lab[n]=id; q[t++]=n; }}
+      out.push({mem,edge});} return out;};
+  for(const c of [1,2]){
+    for(const comp of comps(s=>cls[s]===c)){ if(comp.mem.length>=minPx)continue; const cnt=[0,0,0,0,0];
+      for(const p of comp.mem){const j=p%W; for(const n of [p-W,p+W,(j>0?p-1:-1),(j<W-1?p+1:-1)]) if(n>=0&&n<W*H&&cls[n]!==c) cnt[cls[n]]++;}
+      const tgt=cnt.indexOf(Math.max(...cnt)); if(Math.max(...cnt)>0) for(const p of comp.mem) cls[p]=tgt; }
+    for(const comp of comps(s=>cls[s]!==c)){ if(!comp.edge && comp.mem.length<holePx) for(const p of comp.mem) cls[p]=c; }
+  }
+}
+function parcelMask(W,H,scale){ const v=new Uint8Array(W*H);
+  if(S.parcel.length<3){v.fill(1);return v;}
+  const c=new OffscreenCanvas(W,H), x=c.getContext("2d"); x.fillStyle="#fff"; x.beginPath();
+  S.parcel.forEach(([a,b],i)=>i?x.lineTo(a*scale,b*scale):x.moveTo(a*scale,b*scale)); x.closePath(); x.fill();
+  const d=x.getImageData(0,0,W,H).data; for(let o=0;o<W*H;o++) v[o]=d[o*4+3]>127?1:0; return v; }
+function perimeter(cls,valid,W,H,c){ // boundary edge count × π/4 (corrects staircase over-count)
+  let e=0; const inn=(i,j)=>i>=0&&j>=0&&i<H&&j<W&&valid[i*W+j]&&cls[i*W+j]===c;
+  for(let i=0;i<H;i++)for(let j=0;j<W;j++){ if(!inn(i,j))continue; if(!inn(i-1,j))e++; if(!inn(i+1,j))e++; if(!inn(i,j-1))e++; if(!inn(i,j+1))e++; }
+  return e*Math.PI/4; }
+
+// ------------------------------------------------------------- results
+const ROWS=[["lawn_sqft","Lawn","sq ft","lawn"],["lawn_perimeter_ft","Lawn edge","ft",null],["roof_footprint_sqft","Roof footprint","sq ft","roof"],
+ ["roof_surface_sqft","Roof surface (pitch-adjusted)","sq ft",null],["roof_squares","Roofing squares","sq",null],["roof_perimeter_ft","Roof outline","ft",null],
+ ["hardscape_sqft","Hardscape","sq ft","hardscape"],["tree_canopy_sqft","Tree canopy","sq ft","tree"],["parcel_sqft","Area measured","sq ft",null]];
+function renderResults(){
+  const r=S.result; $("results").classList.remove("hidden");
+  const rv=$("reviewBox"); rv.innerHTML=r.review.required?`<div class="warn"><b>Review recommended.</b> ${r.review.reasons.join("; ")}.</div>`:`<div class="ok">No review flags. Overall confidence ${fmt(r.confidence.overall*100,0)}%.</div>`;
+  const tb=$("measTbl").querySelector("tbody"); tb.innerHTML="";
+  for(const [k,label,unit,cc] of ROWS){ const tr=document.createElement("tr"); const v=r.measurements[k];
+    const conf=cc&&r.confidence[cc]!=null?fmt(r.confidence[cc]*100,0)+"%":"";
+    const editable=["lawn_sqft","roof_footprint_sqft","hardscape_sqft","lawn_perimeter_ft","roof_perimeter_ft"].includes(k);
+    tr.innerHTML=`<td>${label}</td><td class="num">${fmt(v,k==="roof_squares"?1:0)} <span class="muted small">${unit}</span></td><td class="num">${editable?`<input class="override" type="number" data-k="${k}" placeholder="—">`:""}</td><td class="num">${conf}</td>`;
+    tb.appendChild(tr);}
+  tb.querySelectorAll("input.override").forEach(inp=>inp.addEventListener("change",()=>{const k=inp.dataset.k; if(inp.value==="")delete S.overrides[k]; else S.overrides[k]=parseFloat(inp.value);
+    requote(); sendFeedback();}));
+  renderQuote(r.quote); renderAccuracy();
+  $("kLawn").textContent=fmt(r.measurements.lawn_sqft); $("kRoof").textContent=fmt(r.measurements.roof_surface_sqft); $("kHard").textContent=fmt(r.measurements.hardscape_sqft);
+}
+function renderQuote(q){ const tb=$("quoteTbl").querySelector("tbody"); tb.innerHTML="";
+  for(const it of q.items){const tr=document.createElement("tr");tr.innerHTML=`<td>${it.service}${it.minimum_applied?' <span class="muted small">(minimum)</span>':""}</td><td class="num">${fmt(it.quantity,it.basis==="roof_squares"?1:0)}</td><td class="num">${money(it.price)}</td>`;tb.appendChild(tr);}
+  const tr=document.createElement("tr");tr.innerHTML=`<td><b>Total</b></td><td></td><td class="num"><b>${money(q.total)}</b></td>`;tb.appendChild(tr);
+  $("kQuote").textContent=money(q.total); }
+async function renderAccuracy(){
+  const card=$("accCard"); if(!S.sample){card.classList.add("hidden");return;} card.classList.remove("hidden");
+  // ground truth from the sample's label image (same 0.15 m grid), clipped to the parcel
+  const lb=await createImageBitmap(await (await fetch("samples/"+S.sample.label)).blob());
+  const c=new OffscreenCanvas(lb.width,lb.height), x=c.getContext("2d"); x.drawImage(lb,0,0); const d=x.getImageData(0,0,lb.width,lb.height).data;
+  const scale=S.sample.gsd/CANON; const valid=parcelMask(lb.width,lb.height,scale); const n=[0,0,0,0,0];
+  for(let o=0;o<lb.width*lb.height;o++) if(valid[o]) n[d[o*4]]++;
+  const pxsq=S.sample.gsd*S.sample.gsd*SQFT; const m=S.result.measurements;
+  const rows=[["Lawn",n[1]*pxsq,m.lawn_sqft],["Roof footprint",n[2]*pxsq,m.roof_footprint_sqft],["Hardscape",n[3]*pxsq,m.hardscape_sqft],["Tree canopy",n[4]*pxsq,m.tree_canopy_sqft]];
+  const tb=$("accTbl").querySelector("tbody"); tb.innerHTML="";
+  for(const [lbl,t,p] of rows){const scored=t>=215; const a=scored?1-Math.abs(p-t)/t:null; const cls=a==null?"muted":(a>=0.9?"acc-good":"acc-bad");
+    const tr=document.createElement("tr"); tr.innerHTML=`<td>${lbl}</td><td class="num">${fmt(t)}</td><td class="num">${fmt(p)}</td><td class="num ${cls}">${a==null?"not scored":fmt(a*100,1)+"%"}</td>`; tb.appendChild(tr);}
+}
+async function sendFeedback(){ if(S.mode!=="server"||!S.result||!S.result.id)return;
+  try{await fetch(`v1/results/${S.result.id}/feedback`,{method:"POST",headers:{...hdr(),"Content-Type":"application/json"},body:JSON.stringify({corrected:S.overrides,note:"UI override"})});
+    $("exStatus").textContent="Correction saved as feedback.";}catch(e){} }
+
+// ------------------------------------------------------------- export
+function publicResult(){const r={...S.result};delete r._cls;delete r._valid;delete r._W;delete r._H;delete r.overlay_png_base64;r.overrides=S.overrides;r.quote_after_overrides=buildQuote(effective(),S.table);return r;}
+async function dl(path,name){const r=await fetch(path,{headers:hdr()});const b=await r.blob();const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();}
+$("exJson").onclick=()=>dl(`v1/results/${S.result.id}`,`pam_${S.result.id}.json`);
+$("exGeo").onclick=()=>dl(`v1/results/${S.result.id}/geojson`,`pam_${S.result.id}.geojson`);
+$("exCsv").onclick=()=>dl(`v1/results/${S.result.id}/csv`,`pam_${S.result.id}.csv`);
+$("exPng").onclick=()=>dl(`v1/results/${S.result.id}/overlay.png`,`pam_${S.result.id}.png`);
+$("exCopy").onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify(publicResult(),null,1));$("exStatus").textContent="Result JSON copied to clipboard.";}catch(e){$("exStatus").textContent="Copy was blocked by the browser.";}};
+init();
+</script>
+</body>
+</html>

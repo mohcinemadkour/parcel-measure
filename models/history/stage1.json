@@ -1,0 +1,110 @@
+[
+ {
+  "epoch": 1,
+  "train_loss": 1.7539,
+  "val_score": 0.7945,
+  "val_miou": 0.5971,
+  "val_lawn_median": 0.7004,
+  "val_roof_median": 0.8886,
+  "minutes": 2.6
+ },
+ {
+  "epoch": 2,
+  "train_loss": 1.2726,
+  "val_score": 0.8546,
+  "val_miou": 0.6524,
+  "val_lawn_median": 0.7683,
+  "val_roof_median": 0.9409,
+  "minutes": 2.4
+ },
+ {
+  "epoch": 3,
+  "train_loss": 1.1812,
+  "val_score": 0.8372,
+  "val_miou": 0.6707,
+  "val_lawn_median": 0.7633,
+  "val_roof_median": 0.9111,
+  "minutes": 2.4
+ },
+ {
+  "epoch": 4,
+  "train_loss": 1.0792,
+  "val_score": 0.8775,
+  "val_miou": 0.6827,
+  "val_lawn_median": 0.8179,
+  "val_roof_median": 0.9371,
+  "minutes": 2.4
+ },
+ {
+  "epoch": 5,
+  "train_loss": 0.9825,
+  "val_score": 0.8751,
+  "val_miou": 0.6882,
+  "val_lawn_median": 0.811,
+  "val_roof_median": 0.9391,
+  "minutes": 2.4
+ },
+ {
+  "epoch": 6,
+  "train_loss": 0.9243,
+  "val_score": 0.8791,
+  "val_miou": 0.7159,
+  "val_lawn_median": 0.8127,
+  "val_roof_median": 0.9456,
+  "minutes": 2.6
+ },
+ {
+  "epoch": 7,
+  "train_loss": 0.8903,
+  "val_score": 0.8672,
+  "val_miou": 0.6908,
+  "val_lawn_median": 0.7854,
+  "val_roof_median": 0.949,
+  "minutes": 2.7
+ },
+ {
+  "epoch": 8,
+  "train_loss": 0.8311,
+  "val_score": 0.882,
+  "val_miou": 0.7212,
+  "val_lawn_median": 0.812,
+  "val_roof_median": 0.9519,
+  "minutes": 2.6
+ },
+ {
+  "epoch": 9,
+  "train_loss": 0.7956,
+  "val_score": 0.9044,
+  "val_miou": 0.7315,
+  "val_lawn_median": 0.8526,
+  "val_roof_median": 0.9562,
+  "minutes": 2.6
+ },
+ {
+  "epoch": 10,
+  "train_loss": 0.7602,
+  "val_score": 0.9006,
+  "val_miou": 0.739,
+  "val_lawn_median": 0.8451,
+  "val_roof_median": 0.9561,
+  "minutes": 2.8
+ },
+ {
+  "epoch": 11,
+  "train_loss": 0.732,
+  "val_score": 0.9063,
+  "val_miou": 0.7413,
+  "val_lawn_median": 0.8536,
+  "val_roof_median": 0.9591,
+  "minutes": 2.8
+ },
+ {
+  "epoch": 12,
+  "train_loss": 0.7204,
+  "val_score": 0.9094,
+  "val_miou": 0.7419,
+  "val_lawn_median": 0.8581,
+  "val_roof_median": 0.9607,
+  "minutes": 3.0
+ }
+]

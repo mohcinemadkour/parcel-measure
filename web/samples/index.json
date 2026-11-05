@@ -1,0 +1,182 @@
+[
+ {
+  "id": "sample_01",
+  "file": "sample_01.png",
+  "label": "sample_01_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 6_9, 48 m square",
+  "tile": "6_9",
+  "truth": {
+   "lawn_sqft": 8874.8,
+   "roof_footprint_sqft": 9241.1,
+   "hardscape_sqft": 5514.3,
+   "tree_canopy_sqft": 980.8
+  }
+ },
+ {
+  "id": "sample_02",
+  "file": "sample_02.png",
+  "label": "sample_02_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 7_8, 48 m square",
+  "tile": "7_8",
+  "truth": {
+   "lawn_sqft": 9235.9,
+   "roof_footprint_sqft": 10279.5,
+   "hardscape_sqft": 2089.3,
+   "tree_canopy_sqft": 2760.4
+  }
+ },
+ {
+  "id": "sample_03",
+  "file": "sample_03.png",
+  "label": "sample_03_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 6_9, 48 m square",
+  "tile": "6_9",
+  "truth": {
+   "lawn_sqft": 8364.0,
+   "roof_footprint_sqft": 8692.1,
+   "hardscape_sqft": 7116.6,
+   "tree_canopy_sqft": 439.5
+  }
+ },
+ {
+  "id": "sample_04",
+  "file": "sample_04.png",
+  "label": "sample_04_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 3_10, 48 m square",
+  "tile": "3_10",
+  "truth": {
+   "lawn_sqft": 11062.5,
+   "roof_footprint_sqft": 8656.7,
+   "hardscape_sqft": 2350.1,
+   "tree_canopy_sqft": 2152.0
+  }
+ },
+ {
+  "id": "sample_05",
+  "file": "sample_05.png",
+  "label": "sample_05_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 5_11, 48 m square",
+  "tile": "5_11",
+  "truth": {
+   "lawn_sqft": 8020.3,
+   "roof_footprint_sqft": 11086.3,
+   "hardscape_sqft": 2882.6,
+   "tree_canopy_sqft": 2408.5
+  }
+ },
+ {
+  "id": "sample_06",
+  "file": "sample_06.png",
+  "label": "sample_06_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 3_10, 48 m square",
+  "tile": "3_10",
+  "truth": {
+   "lawn_sqft": 10665.7,
+   "roof_footprint_sqft": 9036.6,
+   "hardscape_sqft": 3799.0,
+   "tree_canopy_sqft": 0.0
+  }
+ },
+ {
+  "id": "sample_07",
+  "file": "sample_07.png",
+  "label": "sample_07_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 4_13, 48 m square",
+  "tile": "4_13",
+  "truth": {
+   "lawn_sqft": 8920.8,
+   "roof_footprint_sqft": 7225.8,
+   "hardscape_sqft": 6006.0,
+   "tree_canopy_sqft": 2395.9
+  }
+ },
+ {
+  "id": "sample_08",
+  "file": "sample_08.png",
+  "label": "sample_08_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 4_13, 48 m square",
+  "tile": "4_13",
+  "truth": {
+   "lawn_sqft": 7374.5,
+   "roof_footprint_sqft": 8508.4,
+   "hardscape_sqft": 5637.4,
+   "tree_canopy_sqft": 2779.0
+  }
+ },
+ {
+  "id": "sample_09",
+  "file": "sample_09.png",
+  "label": "sample_09_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 7_8, 48 m square",
+  "tile": "7_8",
+  "truth": {
+   "lawn_sqft": 6909.6,
+   "roof_footprint_sqft": 8673.2,
+   "hardscape_sqft": 6480.3,
+   "tree_canopy_sqft": 2517.6
+  }
+ },
+ {
+  "id": "sample_10",
+  "file": "sample_10.png",
+  "label": "sample_10_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 2_13, 48 m square",
+  "tile": "2_13",
+  "truth": {
+   "lawn_sqft": 7441.2,
+   "roof_footprint_sqft": 7670.9,
+   "hardscape_sqft": 3230.5,
+   "tree_canopy_sqft": 6152.5
+  }
+ },
+ {
+  "id": "sample_11",
+  "file": "sample_11.png",
+  "label": "sample_11_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 6_14, 48 m square",
+  "tile": "6_14",
+  "truth": {
+   "lawn_sqft": 10691.7,
+   "roof_footprint_sqft": 6065.4,
+   "hardscape_sqft": 6602.5,
+   "tree_canopy_sqft": 1233.0
+  }
+ },
+ {
+  "id": "sample_12",
+  "file": "sample_12.png",
+  "label": "sample_12_label.png",
+  "gsd": 0.15,
+  "size_m": 48.0,
+  "title": "Held-out tile 6_14, 48 m square",
+  "tile": "6_14",
+  "truth": {
+   "lawn_sqft": 5558.2,
+   "roof_footprint_sqft": 12496.7,
+   "hardscape_sqft": 6161.1,
+   "tree_canopy_sqft": 432.8
+  }
+ }
+]
