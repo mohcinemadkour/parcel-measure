@@ -9,6 +9,8 @@ The full specification (requirements, data, model, API, AWS architecture, accept
 criteria and measured results) is in the companion document *Property Area Measurement
 Prototype: Specification*. `models/evaluation.json` holds the measured accuracy.
 
+Product use cases, pricing and go-to-market plan: [docs/PRODUCT.md](docs/PRODUCT.md).
+
 ## Repository layout
 
 | Path | What it is |
@@ -19,6 +21,7 @@ Prototype: Specification*. `models/evaluation.json` holds the measured accuracy.
 | `models/` | `pam_unet_int8w.onnx` (24.6 MB, used by the API and the browser demo), `model_card.json`, `evaluation.json`, per-property test results, training history. The full-precision `pam_unet.onnx` (97.7 MB) is not in git; `scripts/export_onnx.py` recreates it and the API prefers it when present |
 | `scripts/` | `prepare_potsdam.py`, `train.py`, `export_onnx.py`, `evaluate.py`, `make_samples.py` |
 | `tests/` | Measurement-math and API tests (`pytest`) |
+| `docs/PRODUCT.md` | Use cases, how customers use it, pricing, go-to-market, extensions |
 | `infra/` | `cloudformation.yaml`, `deploy.sh`, `sagemaker_train.py` |
 | `Dockerfile` | Serving image (FastAPI + ONNX Runtime, no PyTorch) |
 
