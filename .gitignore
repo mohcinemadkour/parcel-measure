@@ -1,0 +1,10 @@
+# data and training artefacts (rebuild with scripts/prepare_potsdam.py and scripts/train.py)
+data/
+models/*.pth
+models/run*/
+models/pam_unet.onnx
+demo/
+*.log
+__pycache__/
+.pytest_cache/
+.venv/
